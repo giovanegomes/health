@@ -1,5 +1,7 @@
 import { sql } from "drizzle-orm";
 import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";
+import { createSelectSchema } from "drizzle-zod";
+import z from "zod";
 
 export const user = sqliteTable("users", {
   id: integer("id").primaryKey(),
@@ -11,4 +13,6 @@ export const user = sqliteTable("users", {
   needsSync: integer("needs_sync", { mode: "boolean" }).default(true),
 });
 
-export type User = typeof user.$inferSelect;
+const UserSelectSchema = createSelectSchema(user);
+
+export type User = z.infer<typeof UserSelectSchema>;
