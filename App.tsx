@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { DrawerRouter } from "./src/routes";
+import { Router } from "./src/routes";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { openDatabaseSync } from "expo-sqlite";
 import { drizzle } from "drizzle-orm/expo-sqlite";
@@ -31,7 +31,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <DrawerRouter />
+      <Router />
       <StatusBar style="auto" />
     </SafeAreaProvider>
   );
