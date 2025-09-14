@@ -1,16 +1,14 @@
-import { sql } from "drizzle-orm";
 import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";
 import { createSelectSchema } from "drizzle-zod";
 import z from "zod";
+import { syncColumns, timestamps } from "../helpers/columns.helpers";
 
 export const user = sqliteTable("users", {
   id: integer("id").primaryKey(),
   email: text("email").unique().notNull(),
-  name: text("name").notNull(),
-  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
-  syncedAt: text("synced_at"),
-  needsSync: integer("needs_sync", { mode: "boolean" }).default(true),
+  password: text("password").notNull(),
+  ...timestamps,
+  ...syncColumns,
 });
 
 const UserSelectSchema = createSelectSchema(user);

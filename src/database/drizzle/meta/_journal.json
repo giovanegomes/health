@@ -8,6 +8,13 @@
       "when": 1757790814719,
       "tag": "0000_slimy_masked_marvel",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1757858046985,
+      "tag": "0001_magical_lockjaw",
+      "breakpoints": true
     }
   ]
 }
