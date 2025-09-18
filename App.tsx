@@ -1,37 +1,40 @@
 import { StatusBar } from "expo-status-bar";
 import { Router } from "./src/routes";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { openDatabaseSync } from "expo-sqlite";
-import { drizzle } from "drizzle-orm/expo-sqlite";
-import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
-import migrations from "./src/database/drizzle/migrations";
-import { Text, View } from "react-native";
-
-const expoDb = openDatabaseSync("db.db");
-const db = drizzle(expoDb);
+import { ActivityIndicator, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { DatabaseService } from "./src/services/database";
+import { AuthProvider } from "./src/contexts/auth-context/AuthProvider";
 
 export default function App() {
-  const { success, error } = useMigrations(db, migrations);
+  const [ready, setReady] = useState(false);
 
-  if (error) {
-    return (
-      <View>
-        <Text>Migration error: {error.message}</Text>
-      </View>
-    );
-  }
+  useEffect(() => {
+    const init = async () => {
+      await DatabaseService.getInstance().initialize();
 
-  if (!success) {
+      setReady(true);
+    };
+
+    init();
+  }, []);
+
+  if (!ready) {
     return (
-      <View>
-        <Text>Migration is in progress...</Text>
+      <View
+        style={{ flex: 1, alignContent: "center", justifyContent: "center" }}
+      >
+        <ActivityIndicator size="large" />
+        <Text>Preparando banco de dados...</Text>
       </View>
     );
   }
 
   return (
     <SafeAreaProvider>
-      <Router />
+      <AuthProvider>
+        <Router />
+      </AuthProvider>
       <StatusBar style="auto" />
     </SafeAreaProvider>
   );
